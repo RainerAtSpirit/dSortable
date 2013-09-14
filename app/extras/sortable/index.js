@@ -57,7 +57,7 @@
             system.log('Proceed with response', response);
 
 
-            createStudents(response.extraStudents);
+            extraStudents = createStudents(response.extraStudents);
 
 
             $.each(response.initialTables, function( idx, obj ) {
