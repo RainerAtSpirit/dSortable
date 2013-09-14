@@ -1,7 +1,7 @@
 ﻿define(['durandal/system', 'knockout'],
   function( system, ko ) {
 
-      var dFiddleRepoSource = 'http://rainerat.spirit.de/dSortable/tree/gh-pages/app/';
+      var dFiddleRepoSource = 'https://github.com/RainerAtSpirit/dSortable/tree/gh-pages/app/';
 
       var isDFiddle = ko.observable(false);
       var dFiddleRepoUrl = ko.observable('');
