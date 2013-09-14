@@ -17,7 +17,7 @@
     	"initialTables": [
     		{
     			"name": "Table One",
-    			"assignment": [
+    			"students": [
     				{
     					"id": 1,
     					"name": "Bobby",
@@ -34,7 +34,7 @@
     			]
     		}, {
     			"name": "Table Two",
-    			"assignment": [
+    			"students": [
     				{
     					"id": 4,
     					"name": "Michelle",
@@ -51,7 +51,7 @@
     			]
     		}, {
     			"name": "Table Three",
-    			"assignment": [
+    			"students": [
     				{
     					"id": 7,
     					"name": "Denise",
@@ -68,7 +68,7 @@
     			]
     		}, {
     			"name": "Table Four",
-    			"assignment": [
+    			"students": [
     				{
     					"id": 10,
     					"name": "Cheryl",
@@ -85,7 +85,7 @@
     			]
     		}, {
     			"name": "Table Five",
-    			"assignment": [
+    			"students": [
     				{
     					"id": 13,
     					"name": "Cody",
