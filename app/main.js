@@ -3,17 +3,12 @@
         'text': '../lib/require/text',
         'durandal': '../lib/durandal/js',
         'plugins': '../lib/durandal/js/plugins',
-        'transitions': '../lib/durandal/js/transitions',
-        'knockout': [
-            '//cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min',
-            '../lib/knockout/knockout-2.3.0'
-        ],
-        'jquery': [
-            '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min',
-            '../lib/jquery/jquery-1.9.1.min'
-        ]
+        'transitions': '../lib/durandal/js/transitions'
     }
 });
+
+define('jquery', function () { return jQuery; });
+define('knockout', function () { return ko; });
 
 define(['durandal/system', 'durandal/app', 'durandal/viewLocator'], function( system, app, viewLocator ) {
     //>>excludeStart("build", true);
