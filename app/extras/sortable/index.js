@@ -1,4 +1,4 @@
-﻿define(['knockout', 'durandal/system'], function( ko, system ) {
+﻿define(['knockout', 'durandal/system', 'durandal/composition'], function( ko, system, composition ) {
 
     var Student = function( id, name, gender ) {
         this.id = id;
@@ -83,10 +83,19 @@
 
         });
 
+
+
+
+        ko.bindingHandlers.sortable.beforeMove = this.verifyAssignments;
+        ko.bindingHandlers.sortable.afterMove = this.updateLastAction;
     };
 
-    // Required bindingHandlers for the example
-    ko.bindingHandlers.flash = {
+    // Required bindingHandlers for the example must be converted so that it doesn't bind before Durandal has finished
+    // the composition. http://durandaljs.com/documentation/Interacting-with-the-DOM/
+
+    //ko.bindingHandlers.flash = {
+    composition.addBindingHandler('sortable');
+    composition.addBindingHandler('flash', {
         init: function( element ) {
             $(element).hide();
         },
@@ -103,7 +112,10 @@
             }
         },
         timeout: null
-    };
+    });
+
+
+
 
     return ctor;
 
