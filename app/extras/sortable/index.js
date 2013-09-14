@@ -1,15 +1,5 @@
-﻿define(['knockout', 'durandal/system', 'durandal/composition'], function( ko, system, composition ) {
-
-    var Student = function( id, name, gender ) {
-        this.id = id;
-        this.name = ko.observable(name);
-        this.gender = gender;
-    };
-
-    var Table = function( id, students ) {
-        this.students = ko.observableArray(students);
-        this.students.id = id;
-    };
+﻿define(['knockout', 'durandal/system', 'durandal/composition', './student', './table'],
+    function( ko, system, composition, Student, Table ) {
 
     var ctor = function() {
         var self = this;
@@ -53,12 +43,14 @@
         var initialTables = [];
         var extraStudents = [];
 
-        $.getJSON('./app/extras/sortable/config.json').then(function( response ) {
-            system.log('Proceed with response', response);
+        //Setting up sortable before after events
+        ko.bindingHandlers.sortable.beforeMove = this.verifyAssignments;
+        ko.bindingHandlers.sortable.afterMove = this.updateLastAction;
 
+        // Return async event to ensure that Durandal waits till it resolves
+        return $.getJSON('./app/extras/sortable/config.json').then(function( response ) {
 
             extraStudents = createStudents(response.extraStudents);
-
 
             $.each(response.initialTables, function( idx, obj ) {
                 initialTables.push(
@@ -66,10 +58,11 @@
                 )
             });
 
+            // Updating ko.observable Arrays
             self.tables(initialTables);
             self.availableStudents(extraStudents);
 
-            //Internal function not visible outside $.getJSON
+            //Internal
             function createStudents ( studentArray ) {
                 var result = [];
                 $.each(studentArray, function( idx, obj ) {
@@ -80,20 +73,10 @@
 
                 return result;
             }
-
         });
-
-
-
-
-        ko.bindingHandlers.sortable.beforeMove = this.verifyAssignments;
-        ko.bindingHandlers.sortable.afterMove = this.updateLastAction;
     };
 
-    // Required bindingHandlers for the example must be converted so that it doesn't bind before Durandal has finished
-    // the composition. http://durandaljs.com/documentation/Interacting-with-the-DOM/
-
-    //ko.bindingHandlers.flash = {
+    // Adding bindingHandler using composition. http://durandaljs.com/documentation/Interacting-with-the-DOM/
     composition.addBindingHandler('sortable');
     composition.addBindingHandler('flash', {
         init: function( element ) {
@@ -113,9 +96,6 @@
         },
         timeout: null
     });
-
-
-
 
     return ctor;
 
