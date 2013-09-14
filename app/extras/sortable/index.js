@@ -1,13 +1,72 @@
-﻿define(['./tab', 'plugins/widget', 'knockout'], function (Tab, widget, ko) {
+﻿define(['knockout', 'durandal/system'], function (ko, system) {
 
-    return {
-        tabs: ko.observableArray([
-            new Tab('Durandal', 'A cross-device, cross-platform application framework written in JavaScript, Durandal is a very small amount of code built on top of three existing and established Javascript libraries: jQuery, Knockout and RequireJS.', true),
-            new Tab('UnityDatabinding', 'A general databinding framework for Unity3D. Includes bindings for UI composition and samples for the NGUI library.'),
-            new Tab('Caliburn.Micro', 'Caliburn.Micro is a small, yet powerful framework, designed for building applications across all Xaml Platforms. With strong support for MVVM and other proven UI patterns, Caliburn.Micro will enable you to build your solution quickly, without the need to sacrifice code quality or testability.')
-        ]),
-        addNewTab: function() {
-            this.tabs.push(new Tab('New Tab ', 'A test tab.'));
-        }
+    var ctor = function() {
+        var self = this;
+        this.tables = ko.observableArray([]);
+        this.availableStudents = ko.observableArray([]);
+
+        this.availableStudents.id = "Available Students";
+        this.lastAction = ko.observable();
+        this.lastError = ko.observable();
+        this.maximumStudents = 4;
+        this.isTableFull = function(parent) {
+            return parent().length < self.maximumStudents;
+        };
+
+        this.updateLastAction = function(arg) {
+            self.lastAction("Moved " + arg.item.name() + " from " + arg.sourceParent.id +
+                " (seat " + (arg.sourceIndex + 1) + ") to " + arg.targetParent.id +
+                " (seat " + (arg.targetIndex + 1) + ")");
+        };
+
+        //verify that if a fourth member is added, there is at least one member of each gender
+        this.verifyAssignments = function(arg) {
+            var gender, found,
+                parent = arg.targetParent;
+
+            if (parent.id !== "Available Students" && parent().length === 3 && parent.indexOf(arg.item) < 0) {
+                gender = arg.item.gender;
+                if (!ko.utils.arrayFirst(parent(), function(student) { return student.gender !== gender;})) {
+                    self.lastError("Cannot move " + arg.item.name() + " to " + arg.targetParent.id +
+                        " because there would be too many " + gender + " students");
+                    arg.cancelDrop = true;
+                }
+            }
+        };
     };
+
+    ctor.prototype.activate = function(){
+        $.getJSON('./app/extras/sortable/config.json').then(function(response){
+            system.log('Proceed with response', response);
+
+
+        });
+
+    };
+
+
+    // Required bindingHandlers for the example
+    ko.bindingHandlers.flash = {
+        init: function(element) {
+            $(element).hide();
+        },
+        update: function(element, valueAccessor) {
+            var value = ko.utils.unwrapObservable(valueAccessor());
+            if (value) {
+                $(element).stop().hide().text(value).fadeIn(function() {
+                    clearTimeout($(element).data("timeout"));
+                    $(element).data("timeout", setTimeout(function() {
+                        $(element).fadeOut();
+                        valueAccessor()(null);
+                    }, 3000));
+                });
+            }
+        },
+        timeout: null
+    };
+
+
+    return ctor;
+
+
 });
