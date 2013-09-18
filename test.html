@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo by RainerAtSpirit</title>
+  <link rel="stylesheet" href="test/test.css" type="text/css" />
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+  <script type='text/javascript' src="http://knockoutjs.com/downloads/knockout-2.2.1.js"></script>
+  <script type='text/javascript' src="https://rawgithub.com/rniemeyer/knockout-sortable/master/build/knockout-sortable.js"></script>
+  <script type='text/javascript' src="http://www.danvk.org/dragtable/dragtable.js"></script>
+  <script type="text/javascript" src="test/test.js"></script>
+</head>
+<body>
+  <div id="steps">
+    <div>Process Steps</div>
+    <div>SAVE</div>
+    <table border="1">
+        <thead>
+            <tr data-bind="foreach: statusVals()">
+                <!-- ko if: $index() < 1 -->
+                <th></th>
+                <!-- /ko -->
+                <th data-bind="text: name"></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: roleVals()">
+            <tr>
+                <td data-bind="text: name"></td> 
+                <!-- ko foreach: $root.statusVals() -->
+                    <!-- ko if: $root.CurrentStepLookup($parent.id, id) -->
+                        <td data-bind="text: $root.CurrentStepLookup($parent.id, id).name"></td>
+                    <!-- /ko -->
+                    <!-- ko if: !$root.CurrentStepLookup($parent.id, id) -->
+                        <td></td>
+                    <!-- /ko -->
+                <!-- /ko -->
+            </tr>
+        </tbody>
+    </table>
+<button type="button" data-bind="click: Resort">ReSort</button>
+</div>
+</body>
+</html>
+
